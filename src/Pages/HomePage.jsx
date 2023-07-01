@@ -9,25 +9,28 @@ export const HomePage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState()
 
+
     const getMovies = async () => {
-        setError(false)
-        setLoading(true)
-        axios.get('https://yts.mx/api/v2/list_movies.json?minimum_rating=9&sort_by=rating')
-            .then((response) => {
-                setMovies(response.data.data.movies)
-                setLoading(false);
-            })
-            .catch((error) => {
-                if (error.response && error.response.status === 404) {
-                    setError("Movie not found.");
-                } else {
-                    setError("Error fetching movie data. Please try again later.");
-                }
-                setLoading(false);
-            });
+        setLoading(true);
+        const apiUrl = 'https://yts.mx/api/v2/list_movies.json?minimum_rating=9&sort_by=rating'
+      
+        try {
+          const response = await axios.get(apiUrl);
+          const { data } = response.data;
+          setMovies(data.movies);
+        } catch (error) {
+          console.error("Error fetching movie data:", error);
+          if (error.response && error.response.status === 404) {
+            setError("Movie not found.");
+          } else {
+            setError("Error fetching movie data. Please try again later.");
+          }
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    }
-
+    
     useEffect(() => {
         getMovies()
     }, [])

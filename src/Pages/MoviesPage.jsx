@@ -13,46 +13,30 @@ const MoviesPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [searchTerm, setSearchTerm] = useState(searchParams.get('query'))
 
+
     const getMovies = async () => {
-        setError(false)
-        setLoading(true)
-        const query = searchParams.get('query')
-        if (query !== undefined && query !== null && query !== "") {
-            console.log(`https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}&query_term=${query}`)
-            axios.get(`https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}&query_term=${query}`)
-                .then((response) => {
-                    setResponse(response.data.data)
-                    console.log(response.data.data)
-                    setMovies(response.data.data.movies)
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error fetching movie data:", error);
-                    if (error.response && error.response.status === 404) {
-                        setError("Movie not found.");
-                    } else {
-                        setError("Error fetching movie data. Please try again later.");
-                    }
-                    setLoading(false);
-                });
-        } else {
-            axios.get(`https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}`)
-                .then((response) => {
-                    setResponse(response.data.data)
-                    setMovies(response.data.data.movies)
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error fetching movie data:", error);
-                    if (error.response && error.response.status === 404) {
-                        setError("Movie not found.");
-                    } else {
-                        setError("Error fetching movie data. Please try again later.");
-                    }
-                    setLoading(false);
-                });
+        setLoading(true);
+        const query = searchParams.get('query');
+        const apiUrl = query
+          ? `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}&query_term=${query}`
+          : `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}`;
+      
+        try {
+          const response = await axios.get(apiUrl);
+          const { data } = response.data;
+          setResponse(data);
+          setMovies(data.movies);
+        } catch (error) {
+          console.error("Error fetching movie data:", error);
+          if (error.response && error.response.status === 404) {
+            setError("Movie not found.");
+          } else {
+            setError("Error fetching movie data. Please try again later.");
+          }
+        } finally {
+          setLoading(false);
         }
-    }
+      };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault()

@@ -24,7 +24,7 @@ const MovieDetailsPage = () => {
 
     const getMovie = async () => {
         try {
-            const response = await axios.get(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}&with_images=true&with_cast=true`)
+            const response = await axios.get(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}&with_images=true`)
             setMovie(response.data.data.movie)
             setGenres(response.data.data.movie.genres)
             getSuggestions()
