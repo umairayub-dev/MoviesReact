@@ -2,52 +2,120 @@ import React, { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 import Pagination from '../components/MyPagination'
-import { Button, Container, Form, Spinner } from "react-bootstrap";
+import { Badge, Button, Container, Form, Spinner } from "react-bootstrap";
 import MoviesGrid from '../components/MoviesGrid'
+import FilterModal from '../components/FilterModal';
 
 const MoviesPage = () => {
-    const [response, setResponse] = useState([])
-    const [movies, setMovies] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState()
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [searchTerm, setSearchTerm] = useState(searchParams.get('query'))
-
+    const [response, setResponse] = useState([]);
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchTerm, setSearchTerm] = useState(searchParams.get('query'));
+    const [filters, setFilters] = useState({
+        quality: null,
+        minimumRating: null,
+        genre: null,
+        sort_by: 'date_added',
+        order_by: 'desc',
+    });
+    const [showModal, setShowModal] = useState(false);
 
     const getMovies = async () => {
         setLoading(true);
-        const query = searchParams.get('query');
-        const apiUrl = query
-          ? `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}&query_term=${query}`
-          : `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get('page')}`;
-      
         try {
-          const response = await axios.get(apiUrl);
-          const { data } = response.data;
-          setResponse(data);
-          setMovies(data.movies);
+            const response = await axios.get(buildApiUrl());
+            console.log(buildApiUrl());
+            const { data } = response.data;
+            setResponse(data);
+            setMovies(data.movies);
         } catch (error) {
-          console.error("Error fetching movie data:", error);
-          if (error.response && error.response.status === 404) {
-            setError("Movie not found.");
-          } else {
-            setError("Error fetching movie data. Please try again later.");
-          }
+            console.error("Error fetching movie data:", error);
+            if (error.response && error.response.status === 404) {
+                setError("Movie not found.");
+            } else {
+                setError("Error fetching movie data. Please try again later.");
+            }
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
+
+    const buildApiUrl = () => {
+        const query = searchParams.get('query');
+        let apiUrl = `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get(
+            'page'
+        ) || 1}`;
+
+        if (query) {
+            apiUrl += `&query_term=${query}`;
+        }
+
+        for (const key in filters) {
+            if (filters[key]) {
+                apiUrl += `&${key}=${filters[key]}`;
+            }
+        }
+
+        return apiUrl;
+    };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault()
         searchTerm && setSearchParams({ page: 1, query: searchTerm })
     }
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }));
+    };
+
+    const handleModalClose = () => {
+        setShowModal(false);
+    };
+
+    const handleFilterButtonClick = () => {
+        setShowModal(true);
+    };
+
+    const applyFilters = () => {
+        getMovies();
+        handleModalClose();
+    };
+
+    const handleClearFilters = () => {
+        setFilters({
+            quality: null,
+            minimumRating: null,
+            genre: null,
+            sortBy: null,
+            orderBy: null
+        });
+        console.log("hello clear filter")
+        handleModalClose()
+        getMovies()
+
+    };
     const gotoPage = (p) => {
         if (!p < 1) {
             const query = searchParams.get('query')
             setSearchParams(query ? { page: p, query: query } : { page: p })
         }
     }
+
+    const countAppliedFilters = () => {
+        let count = 0;
+        for (const key in filters) {
+            if (filters[key]) {
+                count++;
+            }
+        }
+        return count;
+    };
 
     useEffect(() => {
         getMovies()
@@ -64,10 +132,18 @@ const MoviesPage = () => {
                             <Form.Group controlId="searchForm" className='input-group'>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Enter your search query"
+                                    placeholder="Enter Movie Title/IMDb Code"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
+                                <Button variant="secondary" className='ms-0 bg-dark color-green border-0 border-end' onClick={handleFilterButtonClick}>
+                                    Filters
+                                    {countAppliedFilters() > 0 && (
+                                        <Badge pill bg="primary" className='ms-2'>
+                                            {countAppliedFilters()}
+                                        </Badge>
+                                    )}
+                                </Button>
                                 <Button variant="primary" type="submit" className='ms-0 bg-dark color-green border-0'>
                                     Search
                                 </Button>
@@ -90,6 +166,7 @@ const MoviesPage = () => {
                     </div>
                 </div>
             ))}
+            <FilterModal showModal={showModal} filters={filters} handleModalClose={handleModalClose} handleFilterChange={handleFilterChange} applyFilters={applyFilters} handleClearFilters={handleClearFilters} />
         </div>
     )
 }

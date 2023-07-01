@@ -47,16 +47,18 @@ body {
 }
 
 .color-green {
-    color: #39ffdc !important;
+    color: #0df3c9 !important;
 }
 
 .bg-green {
-    background-color: #39ffdc !important;
+    background-color: #0df3c9 !important;
     color: black !important
 }
+
 .bg-dark {
     background-color: #212529
 }
+
 .not-found-bg {
     background-color: #18274E;
 }
@@ -89,10 +91,12 @@ body {
         transform: translateY(-100%);
     }
 }
+
 .cta {
     background-color: #131313;
-    color: #39ffdc;
+    color: #0df3c9;
 }
+
 .cta:hover {
     color: #131313;
     background-color: white;
@@ -105,4 +109,47 @@ body {
 
 .star-filled {
     color: gold;
+}
+
+.custom-modal .modal-content {
+    background-color: #212529;
+    color: #fff;
+}
+
+.custom-modal .modal-header,
+.custom-modal .modal-footer {
+    background-color: #23272b;
+    border-color: #1d2124;
+}
+
+.custom-modal .modal-title {
+    color: #fff;
+}
+
+.custom-modal .btn-primary {
+    background-color: #0df3c9;
+    border-color: #0df3c9;
+}
+
+.custom-modal .btn-primary:hover {
+    background-color: #00ccb3;
+    border-color: #00ccb3;
+}
+
+.custom-modal .btn-primary:focus,
+.custom-modal .btn-primary.focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 243, 201, 0.5);
+}
+
+.custom-modal .btn-primary.disabled,
+.custom-modal .btn-primary:disabled {
+    background-color: #0df3c9;
+    border-color: #0df3c9;
+}
+
+.custom-modal .btn-primary:not(:disabled):not(.disabled):active,
+.custom-modal .btn-primary:not(:disabled):not(.disabled).active,
+.show>.custom-modal .btn-primary.dropdown-toggle {
+    background-color: #00ccb3;
+    border-color: #00ccb3;
 }
