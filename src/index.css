@@ -153,3 +153,22 @@ body {
     background-color: #00ccb3;
     border-color: #00ccb3;
 }
+
+/* Customize the pagination component */
+.custom-pagination .page-item.active .page-link {
+  background-color: #0df3c9;
+  border-color: #0df3c9;
+  color: #212529;
+}
+
+.custom-pagination .page-link {
+  color: #0df3c9;
+  background-color: #212529;
+  border-color: #0df3c9;
+}
+
+.custom-pagination .page-link:hover {
+  color: #ffffff;
+  background-color: #595758;
+  border-color: #0df3c9;
+}
