@@ -5,7 +5,7 @@ const MyPagination = ({ totalItems, currentPage, gotoPage }) => {
     const [pages, setPages] = useState([])
     console.log(currentPage)
     useEffect(() => {
-        setPages(calcPages(totalItems, 5))
+        setPages(calcPages(totalItems, 7))
     }, [totalItems, currentPage])
 
     const calcPages = (totalItems, maxVisible) => {
@@ -33,7 +33,7 @@ const MyPagination = ({ totalItems, currentPage, gotoPage }) => {
     }
 
     return (
-        <Pagination className="custom-pagination" bg="dark" data-bs-theme="dark">
+        <Pagination className="custom-pagination d-flex flex-wrap" bg="dark" data-bs-theme="dark">
             <Pagination.Prev disabled={currentPage === 1} onClick={() => gotoPage(currentPage - 1)} />
             {pages && pages.map((page, key) => <Pagination.Item key={key} onClick={() => gotoPage(page)} active={page === currentPage}>{page}</Pagination.Item>)}
             {pages.length > 10 && <Pagination.Ellipsis />}
