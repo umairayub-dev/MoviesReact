@@ -19,9 +19,9 @@ const MyNavbar = () => {
         <Navbar bg="dark" data-bs-theme="dark" expand="sm" className='w-100 min-vw-100'>
             <Container>
                 <Navbar.Brand>
-                    <NavLink to="/" className="text-decoration-none color-green fw-bolder">MFlix</NavLink>
+                    <NavLink to="/" className="text-decoration-none color-green fw-bolder ms-2">MFlix</NavLink>
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" className='me-3' />
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className='me-1' />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-between flex-grow-1 text-gray-200 align-baseline">
                         <div className='d-flex flex-column flex-sm-row'>
