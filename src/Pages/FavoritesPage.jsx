@@ -15,7 +15,7 @@ const FavoritesPage = () => {
         <div className="container min-vh-100">
             <div className='d-flex justify-content-between w-100 px-5 p-3'>
                 <h3 className='fw-bold color-green'>Favorites</h3>
-                <h3 className='fw-bold color-green'>({favoritesContext.state.favorites.length})</h3>
+                <h3 className='fw-bold color-green'>({state.authStatus === "LoggedIn" ? favoritesContext.state.favorites.length : 0})</h3>
             </div>
             <div className='py-2 d-flex flex-column text-center'>
                 {state.authStatus === "LoggedIn" ? <div>
