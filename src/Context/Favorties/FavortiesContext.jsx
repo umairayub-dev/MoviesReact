@@ -1,50 +1,82 @@
-import { createContext, useReducer, useEffect } from "react";
-
-export const FavoritesContext = createContext()
+import axios from "axios";
+import { createContext, useEffect, useContext } from "react";
+import { AuthContext } from "../../../Context/Auth/AuthContext";
+import { useReducer } from "react";
 
 const initialState = {
-    favorites: []
-}
-export const FavoritesReducer = (state, action) => {
-    switch (action.type) {
-        case 'INITIALIZE_STATE':
-            return { ...state, ...action.payload }
-        case 'ADD_TO_FAVORITES':
-            console.log(action.payload)
-            return {
-                ...state,
-                favorites: [...state.favorites, action.payload]
-            }
-        case 'REMOVE_FROM_FAVORITES':
-            return {
-                ...state,
-                favorites: state.favorites.filter((item) => item.id !== action.payload)
-            }
-        default:
-            return state
+  favorites: [],
+  loading: false,
+  error: null,
+};
+
+// Action types
+const actionTypes = {
+  FETCH_FAVORTIE_START: "FETCH_FAVORTIE_START",
+  FETCH_FAVORTIE_SUCCESS: "FETCH_FAVORTIE_SUCCESS",
+  FETCH_FAVORITE_ERROR: "FETCH_FAVORITE_ERROR",
+  REMOVE_FAVORITES: "REMOVE_FAVORITES",
+};
+
+const favoritesReducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_FAVORTIE_START:
+      return { ...state, loading: true };
+    case actionTypes.FETCH_FAVORTIE_SUCCESS:
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        favorites: action.payload,
+      };
+    case actionTypes.FETCH_FAVORITE_ERROR:
+      return { ...state, loading: false, error: action.payload };
+    case actionTypes.REMOVE_FAVORITES:
+      return {
+        ...initialState,
+      };
+    default:
+      return state;
+  }
+};
+
+const FavoritesContext = createContext();
+
+const FavoritesProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(favoritesReducer, initialState);
+  const authContext = useContext(AuthContext);
+
+  const fetchFavorites = async () => {
+    dispatch({ type: actionTypes.FETCH_FAVORTIE_START });
+    try {
+      await axios
+        .get("http://localhost:4000/api/favorites", {
+          headers: {
+            Authorization: `Bearer ${authContext.state?.token}`,
+          },
+        })
+        .then((response) => {
+          dispatch({
+            type: actionTypes.FETCH_FAVORTIE_SUCCESS,
+            payload: response.data,
+          });
+        })
+        .catch((error) => {
+          throw new Error(error.message);
+        });
+    } catch (error) {
+      throw new Error(error.message);
     }
-}
-
-export const FavoritesContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(FavoritesReducer, initialState)
-
-    const initializeStateFromLocalStorage = () => {
-        const storedState = localStorage.getItem('favorites')
-        const isDiff = storedState !== JSON.stringify(state)
-        if (isDiff) {
-            dispatch({ type: 'INITIALIZE_STATE', payload: JSON.parse(storedState) })
-        }
+  };
+  useEffect(() => {
+    if (authContext.state?.authStatus === "LoggedIn") {
+      fetchFavorites();
     }
-    useEffect(() => {
-        initializeStateFromLocalStorage()
-    }, [])
-    useEffect(() => {
-        localStorage.setItem('favorites', JSON.stringify(state))
-    }, [state])
+  }, [authContext.state]);
+  return (
+    <FavoritesContext.Provider value={{ state, dispatch }}>
+      {children}
+    </FavoritesContext.Provider>
+  );
+};
 
-    return (
-        <FavoritesContext.Provider value={{ state, dispatch }}>
-            {children}
-        </FavoritesContext.Provider>
-    )
-}  
+export { FavoritesContext, FavoritesProvider };

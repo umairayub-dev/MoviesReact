@@ -1,34 +1,25 @@
 import { createContext, useEffect, useReducer } from "react";
-import { AuthReducer } from './AuthReducer'
+import { AuthReducer } from "./AuthReducer";
+import Cookies from "js-cookie";
 
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 const initialState = {
-    users: [],
-    authStatus: undefined,
-    currentUser: undefined
-}
+  authStatus: undefined,
+  user: "user",
+  token: Cookies.get("token") || undefined,
+};
 
 export const AuthContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(AuthReducer, initialState)
+  const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-    const initializeStateFromLocalStorage = () => {
-        const storedState = localStorage.getItem('authState')
-        const isDiff = storedState !== JSON.stringify(state)
-        if (isDiff) {
-            dispatch({ type: 'INITIALIZE_STATE', payload: JSON.parse(storedState) })
-        }
-    }
-    useEffect(() => {
-        initializeStateFromLocalStorage()
-    }, [])
-    useEffect(() => {
-        localStorage.setItem('authState', JSON.stringify(state))
-    }, [state])
+  useEffect(() => {
+    Cookies.set("token", state.token);
+  }, [state.token]);
 
-    return (
-        <AuthContext.Provider value={{ state, dispatch }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}  
+  return (
+    <AuthContext.Provider value={{ state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

@@ -44,7 +44,7 @@ const MoviesPage = () => {
 
     const buildApiUrl = () => {
         const query = searchParams.get('query');
-        let apiUrl = `https://yts.mx/api/v2/list_movies.json?page=${searchParams.get(
+        let apiUrl = `http://localhost:4000/api/movies?page=${searchParams.get(
             'page'
         ) || 1}`;
 
