@@ -12,7 +12,7 @@ export const HomePage = () => {
 
     const getMovies = async () => {
         setLoading(true);
-        const apiUrl = 'http://localhost:4000/api/movies?minimum_rating=9&sort_by=rating'
+        const apiUrl = 'https://victorious-lion-clothes.cyclic.cloud/api/movies?minimum_rating=9&sort_by=rating'
       
         try {
           const response = await axios.get(apiUrl);

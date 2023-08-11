@@ -21,7 +21,7 @@ const MovieCard = ({ movie }) => {
     <div className='rounded-3' style={{ width: '11rem', height: '17rem' }}>
       {isImageLoading ? (
         <LoadingMoviesSkeleton />
-      ) : <Link to={`/movie/${movie._id}`}>
+      ) : <Link to={`/movie/${movie.movieId || movie._id}`}>
         <img src={movie.medium_cover_image} alt={movie.title} className='rounded-3 overflow-hidden' style={{ objectFit: 'cover', width: '11rem', height: '17rem' }} />
       </Link>}
     </div>

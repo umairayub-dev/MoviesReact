@@ -3,7 +3,6 @@ import { Pagination } from 'react-bootstrap'
 
 const MyPagination = ({ totalItems, currentPage, gotoPage }) => {
     const [pages, setPages] = useState([])
-    console.log(currentPage)
     useEffect(() => {
         setPages(calcPages(totalItems, 7))
     }, [totalItems, currentPage])

@@ -11,7 +11,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "./Context/Auth/AuthContext";
 import ToastContainer from "./components/ToastContainer";
 import { decodeToken } from "react-jwt";
-import AdminPage from "./Pages/AdminPage";
+import AdminPage from "./Admin";
 
 const App = () => {
   const { state } = useContext(AuthContext);
@@ -26,32 +26,48 @@ const App = () => {
   };
   const currentToken = decodeUser(state?.token);
 
+  const getRoutes = (role) => {
+    if (role === "admin") {
+      return (
+        <Routes>
+          <Route path="/" element={<Navigate to="/admin-panel/dashboard" />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/movie/:id" element={<MovieDetailsPage />} />
+          <Route path="/admin-panel/*" element={<AdminPage />} />
+          <Route path="/login" element={<Navigate to="/" />} />
+          <Route path="/signup" element={<Navigate to="/" />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      );
+    } else {
+      return (
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route
+            path="/favorites"
+            element={currentToken ? <FavoritesPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/login"
+            element={currentToken ? <Navigate to="/" /> : <LoginPage />}
+          />
+          <Route
+            path="/signup"
+            element={currentToken ? <Navigate to="/" /> : <SignupPage />}
+          />
+          <Route path="/admin-panel/*" element={<Navigate to="/" />} />
+          <Route path="/movie/:id" element={<MovieDetailsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      );
+    }
+  };
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/movies" element={<MoviesPage />} />
-        <Route
-          path="/favorites"
-          element={currentToken ? <FavoritesPage /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={currentToken ? <Navigate to="/" /> : <LoginPage />}
-        />
-        <Route
-          path="/signup"
-          element={currentToken ? <Navigate to="/" /> : <SignupPage />}
-        />
-
-        <Route
-          path="/admin-panel"
-          element={currentToken === "admin" ? <AdminPage /> : <NotFoundPage />}
-        />
-        <Route path="/movie/:id" element={<MovieDetailsPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      {getRoutes(currentToken)}
       <ToastContainer />
     </>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useContext } from "react";
-import { AuthContext } from "../../../Context/Auth/AuthContext";
+import { AuthContext } from "../../Context/Auth/AuthContext";
 import { useReducer } from "react";
 
 const initialState = {
@@ -49,7 +49,7 @@ const FavoritesProvider = ({ children }) => {
     dispatch({ type: actionTypes.FETCH_FAVORTIE_START });
     try {
       await axios
-        .get("http://localhost:4000/api/favorites", {
+        .get("https://victorious-lion-clothes.cyclic.cloud/api/favorites", {
           headers: {
             Authorization: `Bearer ${authContext.state?.token}`,
           },

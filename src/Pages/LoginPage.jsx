@@ -16,7 +16,7 @@ const LoginPage = () => {
     setLoading(true);
     try {
       axios
-        .post("http://localhost:4000/api/login", { email, password })
+        .post("https://victorious-lion-clothes.cyclic.cloud/api/login", { email, password })
         .then((response) => {
           // Successful login
           dispatch({

@@ -29,7 +29,7 @@ const MovieDetailsPage = () => {
     console.log(isAuth());
     return (
       isAuth() &&
-      favoritesContext.state?.favorites?.filter((item) => item._id === id)
+      favoritesContext.state?.favorites?.filter((item) => item.movieId === id)
         .length > 0
     );
   };
@@ -37,13 +37,14 @@ const MovieDetailsPage = () => {
   const [loadingFavorite, setLoadingFavorite] = useState(
     isAuth() ? favoritesContext.state?.loading : false
   );
-  const BASE_URL = "http://localhost:4000/api";
+  const BASE_URL = "https://victorious-lion-clothes.cyclic.cloud/api";
 
   const getMovie = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/movie_details?id=${id}`);
       setMovie(response.data.data.movie);
       setGenres(response.data.data.movie.genres);
+      console.log(id, movie.movieId);
     } catch (e) {
       setError(e);
     }
@@ -70,7 +71,7 @@ const MovieDetailsPage = () => {
         // Add to favorites
         const response = await axios.post(
           `${BASE_URL}/favorites/add`,
-          { ...movie },
+          { movieId: id, ...movie },
           {
             headers: {
               Authorization: `Bearer ${authContext.state?.token}`,
@@ -91,7 +92,7 @@ const MovieDetailsPage = () => {
         const response = await axios.delete(
           `${BASE_URL}/favorites/delete/${id}`,
           {
-            headers: {  
+            headers: {
               Authorization: `Bearer ${authContext.state?.token}`,
             },
           }

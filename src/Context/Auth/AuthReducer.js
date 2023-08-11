@@ -4,8 +4,10 @@ export const AuthReducer = (state, action) => {
       return { ...state, token: action.payload, authStatus: "LoggedIn" };
 
     case "LOGOUT_USER":
-      return { ...state, token: undefined, authStatus: undefined }; // set this to null on purpose, do not change
+      return { ...state, token: undefined, authStatus: undefined };
 
+      case "UPDATE_USER":
+        return {...state, token}
     default:
       return new Error("Unhandled action type:" + action.type);
   }

@@ -5,6 +5,7 @@ import useToast from "../Hooks/useToast";
 import { Card, Spinner } from "react-bootstrap";
 import ReviewList from "./ReviewList";
 import ReviewForm from "./ReviewForm";
+import { decodeToken } from "react-jwt";
 
 const API_BASE_URL = "https://victorious-lion-clothes.cyclic.cloud/api";
 
@@ -12,7 +13,7 @@ const Reviews = ({ movieId }) => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(null);
   const authContext = useContext(AuthContext);
-  const user = authContext.state.currentUser;
+  const user = decodeToken(authContext.state?.token);
   const showToast = useToast();
   const [selectedReview, setSelectedReview] = useState(null);
 
@@ -53,6 +54,7 @@ const Reviews = ({ movieId }) => {
           }
         });
     } catch (error) {
+      console.error(error)
       showToast("error", "An error occurred", 100, 1800);
     } finally {
       setSelectedReview(null);
@@ -63,7 +65,7 @@ const Reviews = ({ movieId }) => {
   const onReviewEdit = (review) => {
     setSelectedReview(review);
   };
-  
+
   const onReviewSubmit = async (review) => {
     setIsLoading(true);
     try {
@@ -108,6 +110,7 @@ const Reviews = ({ movieId }) => {
         }
       }
     } catch (error) {
+      console.log(error)
       showToast("error", "An error occurred", 100, 1800);
     } finally {
       setIsLoading(false);

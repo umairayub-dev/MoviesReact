@@ -1,26 +1,55 @@
-import React, { useState } from 'react'
-import cx from 'classnames'
-const Stars = ({ value, setRating }) => {
-    const [hover, setHover] = useState(value);
+import React, { useState } from "react";
+import cx from "classnames";
+import { useEffect } from "react";
+const Stars = ({ value, setRating, allowUpdate, count, size }) => {
+  const [hover, setHover] = useState(value);
+  useEffect(() => {
+    setHover(value);
+  }, [value]);
 
-    return (
-        <div className="star-rating">
-            {[...Array(5)].map((_, index) => {
-                index += 1;
-                return (
-                    <span
-                        key={index}
-                        className={cx('p-1 cursor-pointer', { 'star-filled': index <= (hover || value) })}
-                        onClick={() => setRating(index)}
-                        onMouseEnter={() => setHover(index)}
-                        onMouseLeave={() => setHover(value)}
-                    >
-                        <span className="star">&#9733;</span>
-                    </span>
-                );
+  const handleStarClick = (index) => {
+    if (allowUpdate) {
+      setRating(index);
+    }
+  };
+
+  const handleStarMouseEnter = (index) => {
+    if (allowUpdate) {
+      setHover(index);
+    }
+  };
+
+  const handleStarMouseLeave = () => {
+    if (allowUpdate) {
+      setHover(value);
+    }
+  };
+
+  const starStyle = {
+    fontSize: size === "sm" ? "1" : size === "lg" ? "2.9rem" : "1.8rem",
+  };
+  return (
+    <div className="star-rating">
+      {[...Array(count)].map((_, index) => {
+        index += 1;
+        return (
+          <span
+            key={index}
+            className={cx("p-1 cursor-pointer", {
+              "star-filled": index <= (hover || value),
             })}
-        </div>
-    );
-}
+            onClick={() => handleStarClick(index)}
+            onMouseEnter={() => handleStarMouseEnter(index)}
+            onMouseLeave={handleStarMouseLeave}
+          >
+            <span className="star" style={starStyle}>
+              &#9733;
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+};
 
-export default Stars
+export default Stars;

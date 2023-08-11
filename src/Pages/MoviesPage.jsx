@@ -44,7 +44,7 @@ const MoviesPage = () => {
 
     const buildApiUrl = () => {
         const query = searchParams.get('query');
-        let apiUrl = `http://localhost:4000/api/movies?page=${searchParams.get(
+        let apiUrl = `https://victorious-lion-clothes.cyclic.cloud/api/movies?page=${searchParams.get(
             'page'
         ) || 1}`;
 

@@ -17,7 +17,7 @@ const SignupPage = () => {
     setLoading(true);
     try {
       axios
-        .post("http://localhost:4000/api/signup", { username, email, password })
+        .post("https://victorious-lion-clothes.cyclic.cloud/api/signup", { username, email, password })
         .then((response) => {
           // Successful signup
           showToast("success", "Signup successful", 100, 2000);

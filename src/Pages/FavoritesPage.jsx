@@ -10,6 +10,7 @@ const FavoritesPage = () => {
   const { state } = useContext(AuthContext);
   const favoritesContext = useContext(FavoritesContext);
 
+  console.log(state);
   return (
     <div className="container min-vh-100">
       <div className="d-flex justify-content-between w-100 px-5 p-3">

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 export const AuthContext = createContext();
 
 const initialState = {
-  authStatus: undefined,
+  authStatus: Cookies.get("token") ? "LoggedIn" : undefined,
   user: "user",
   token: Cookies.get("token") || undefined,
 };

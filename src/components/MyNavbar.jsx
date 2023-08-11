@@ -10,7 +10,7 @@ import { decodeToken } from "react-jwt";
 
 const AdminNavLinks = () => (
   <>
-    <NavLink className="nav-link mx-1" to="/" exact>
+    <NavLink className="nav-link mx-1" to="/home" exact>
       Home
     </NavLink>
     <NavLink className="nav-link mx-1" to="/movies">
@@ -70,7 +70,7 @@ const MyNavbar = () => {
       <Container>
         <Navbar.Brand>
           <NavLink
-            to="/"
+            to={currentUser && currentUser.token === 'admin' ? '/home' : '/'}
             className="text-decoration-none color-green fw-bolder ms-2"
           >
             MFlix
@@ -92,7 +92,7 @@ const MyNavbar = () => {
               {currentUser && currentUser.token === "admin" ? (
                 <>
                   {/* Show admin-specific link(s) */}
-                  <NavLink className="nav-link mx-1" to="/admin-panel">
+                  <NavLink className="nav-link mx-1" to="/admin-panel/">
                     Admin Panel
                   </NavLink>
                   <MdLogout

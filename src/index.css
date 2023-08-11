@@ -1,157 +1,155 @@
 * {
-    padding: 0;
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-    max-width: 100vw;
-    width: 100%;
-    background-color: #0b0e14;
-    overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  background-color: #0b0e14;
+  overflow-x: hidden;
 }
 
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-
 .bottom-10 {
-    bottom: 2.5rem;
+  bottom: 2.5rem;
 }
 
 .top-14 {
-    top: 3.5rem;
+  top: 3.5rem;
 }
 
 .left-50 {
-    left: 50%;
+  left: 50%;
 }
 
 .zIndex-9999 {
-    z-index: 9999 !important;
+  z-index: 9999 !important;
 }
 
 .max-w {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    min-width: 100vw !important;
-    overflow: hidden !important;
-
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 100vw !important;
+  overflow: hidden !important;
 }
 
 .bg-main {
-    background-color: #0b0e14;
+  background-color: #0b0e14;
 }
 
 .color-green {
-    color: #0df3c9 !important;
+  color: #0df3c9 !important;
 }
 
 .bg-green {
-    background-color: #0df3c9 !important;
-    color: black !important
+  background-color: #0df3c9 !important;
+  color: black !important;
 }
 
 .bg-dark {
-    background-color: #212529
+  background-color: #212529;
 }
 
 .not-found-bg {
-    background-color: #18274E;
+  background-color: #18274e;
 }
 
 .myToast {
-    transform: translateY(-100%);
-    animation: toastSlideIn 0.3s ease-in forwards;
+  transform: translateY(-100%);
+  animation: toastSlideIn 0.3s ease-in forwards;
 }
 
 @keyframes toastSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes toastSlideOut {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    100% {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
 
 .cta {
-    background-color: #131313;
-    color: #0df3c9;
+  background-color: #131313;
+  color: #0df3c9;
 }
 
 .cta:hover {
-    color: #131313;
-    background-color: white;
-    transition: 0.5s;
+  color: #131313;
+  background-color: white;
+  transition: 0.5s;
 }
 
 .star {
-    font-size: 50px;
+  font-size: 50px;
 }
 
 .star-filled {
-    color: gold;
+  color: gold;
 }
 
 .custom-modal .modal-content {
-    background-color: #212529;
-    color: #fff;
+  background-color: #212529;
+  color: #fff;
 }
 
 .custom-modal .modal-header,
 .custom-modal .modal-footer {
-    background-color: #23272b;
-    border-color: #1d2124;
+  background-color: #23272b;
+  border-color: #1d2124;
 }
 
 .custom-modal .modal-title {
-    color: #fff;
+  color: #fff;
 }
 
 .custom-modal .btn-primary {
-    background-color: #0df3c9;
-    border-color: #0df3c9;
+  background-color: #0df3c9;
+  border-color: #0df3c9;
 }
 
 .custom-modal .btn-primary:hover {
-    background-color: #00ccb3;
-    border-color: #00ccb3;
+  background-color: #00ccb3;
+  border-color: #00ccb3;
 }
 
 .custom-modal .btn-primary:focus,
 .custom-modal .btn-primary.focus {
-    box-shadow: 0 0 0 0.2rem rgba(13, 243, 201, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(13, 243, 201, 0.5);
 }
 
 .custom-modal .btn-primary.disabled,
 .custom-modal .btn-primary:disabled {
-    background-color: #0df3c9;
-    border-color: #0df3c9;
+  background-color: #0df3c9;
+  border-color: #0df3c9;
 }
 
 .custom-modal .btn-primary:not(:disabled):not(.disabled):active,
 .custom-modal .btn-primary:not(:disabled):not(.disabled).active,
-.show>.custom-modal .btn-primary.dropdown-toggle {
-    background-color: #00ccb3;
-    border-color: #00ccb3;
+.show > .custom-modal .btn-primary.dropdown-toggle {
+  background-color: #00ccb3;
+  border-color: #00ccb3;
 }
 
 /* Customize the pagination component */
@@ -171,4 +169,16 @@ body {
   color: #ffffff;
   background-color: #595758;
   border-color: #0df3c9;
+}
+
+.dashboard-card {
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
 }
