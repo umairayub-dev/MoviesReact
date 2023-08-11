@@ -35,15 +35,15 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container fluid>
+    <Container fluid className="p-0">
       <div className="border-start border-dark bg-primary p-3 d-flex text-white justify-content-between align-items-center">
-        <span className="fs-4 fw-bold">Movies</span>
+        <span className="fs-4 fw-bold">Dashboard</span>
       </div>
-      <Row className="justify-content-center mt-3">
-        <Col xs={12} sm={6} md={4} lg={3}>
+      <Row className="justify-content-center mt-5 p-2">
+        <Col xs={12} sm={6} md={4} lg={3} className="gap-2">
           <Card className="dashboard-card">
             <Card.Body>
-              <RiMovie2Line />
+              <RiMovie2Line size={46}/>
               <Card.Title>Total Movies</Card.Title>
               <Card.Text>{dashboardData.numMovies}</Card.Text>
             </Card.Body>
@@ -52,7 +52,7 @@ const Dashboard = () => {
         <Col xs={12} sm={6} md={4} lg={3}>
           <Card className="dashboard-card">
             <Card.Body>
-              <FiUsers />
+              <FiUsers size={46}/>
               <Card.Title>Total Users</Card.Title>
               <Card.Text>{dashboardData.numUsers}</Card.Text>
             </Card.Body>
@@ -61,7 +61,7 @@ const Dashboard = () => {
         <Col xs={12} sm={6} md={4} lg={3}>
           <Card className="dashboard-card">
             <Card.Body>
-              <MdOutlineReviews />
+              <MdOutlineReviews size={46} />
               <Card.Title>Total Reviews</Card.Title>
               <Card.Text>{dashboardData.numReviews}</Card.Text>
             </Card.Body>
@@ -70,7 +70,7 @@ const Dashboard = () => {
         <Col xs={12} sm={6} md={4} lg={3}>
           <Card className="dashboard-card">
             <Card.Body>
-              <MdFavoriteBorder />
+              <MdFavoriteBorder size={46}/>
               <Card.Title>Total Favorites</Card.Title>
               <Card.Text>{dashboardData.numFavorites}</Card.Text>
             </Card.Body>

@@ -16,23 +16,32 @@ const MovieTable = ({
       <table className="table table-dark table-striped">
         <thead>
           <tr>
-            <th onClick={() => handleSort("imdb_code")}>
+            <th
+              className="cursor-pointer"
+              onClick={() => handleSort("imdb_code")}
+            >
               IMDB Code {sortConfig.key === "imdb_code" && sortArrow}
             </th>
-            <th onClick={() => handleSort("title")}>
+            <th className="cursor-pointer" onClick={() => handleSort("title")}>
               Title {sortConfig.key === "title" && sortArrow}
             </th>
-            <th onClick={() => handleSort("year")}>
+            <th className="cursor-pointer" onClick={() => handleSort("year")}>
               Year {sortConfig.key === "year" && sortArrow}
             </th>
-            <th onClick={() => handleSort("rating")}>
+            <th className="cursor-pointer" onClick={() => handleSort("rating")}>
               Rating {sortConfig.key === "rating" && sortArrow}
             </th>
-            <th onClick={() => handleSort("runtime")}>
+            <th
+              className="cursor-pointer"
+              onClick={() => handleSort("runtime")}
+            >
               Runtime {sortConfig.key === "runtime" && sortArrow}
             </th>
             <th>Language</th>
-            <th onClick={() => handleSort("date_added")}>
+            <th
+              className="cursor-pointer"
+              onClick={() => handleSort("date_added")}
+            >
               Date Added {sortConfig.key === "date_added" && sortArrow}
             </th>
             <th>Action</th>

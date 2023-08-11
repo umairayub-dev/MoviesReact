@@ -36,20 +36,26 @@ const UsersPage = () => {
   }, []);
 
   const handleDelete = async (id) => {
+    setIsLoading(true)
     try {
       await axios
-        .delete(`https://victorious-lion-clothes.cyclic.cloud/api/user/${id}`, headers)
+        .delete(
+          `https://victorious-lion-clothes.cyclic.cloud/api/user/${id}`,
+          headers
+        )
         .then((response) => {
           showToast("success", "User deleted successfully", 100, 1800);
           setUsers(response.data.users);
+          setIsLoading(false)
         })
         .catch((error) => {
           showToast("error", "Unable to delete user", 100, 1800);
+          setIsLoading(false)
           console.log(error);
         });
     } catch (error) {
       showToast("error", "Unable to delete user", 100, 1800);
-      console.log(error);
+      setIsLoading(false)
     }
   };
   return (
@@ -64,7 +70,13 @@ const UsersPage = () => {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         ) : (
-          <UsersTable users={users} handleDelete={handleDelete} token={state?.token} />
+          <div className="container">
+            <UsersTable
+              users={users}
+              handleDelete={handleDelete}
+              token={state?.token}
+            />
+          </div>
         )}
       </div>
     </div>

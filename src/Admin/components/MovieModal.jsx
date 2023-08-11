@@ -7,6 +7,30 @@ import { useEffect } from "react";
 const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
   const [formData, setFormData] = useState({});
 
+  const genres = [
+    "Action",
+    "Adventure",
+    "Animation",
+    "Biography",
+    "Comedy",
+    "Crime",
+    "Documentary",
+    "Drama",
+    "Family",
+    "Fantasy",
+    "Film-Noir",
+    "History",
+    "Horror",
+    "Music",
+    "Musical",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Sport",
+    "Thriller",
+    "War",
+    "Western",
+  ];
   useEffect(() => {
     setFormData(movie);
   }, [movie]);
@@ -20,7 +44,11 @@ const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(formData);
+    if (movie?._id) {
+      handleSubmit(formData, true);
+    }else {
+      handleSubmit(formData, false);
+    }
     handleClose();
   };
 
@@ -29,7 +57,6 @@ const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
 
     try {
       if (!imageFile) return;
-
       const snapshot = await uploadBytes(storageRef, imageFile);
       const url = await getDownloadURL(snapshot.ref);
       setFormData((prevData) => ({ ...prevData, [imageField]: url }));
@@ -40,8 +67,32 @@ const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
     }
   };
 
+  const handleGenreChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      let updatedGenres = [...(formData.genres || [])];
+      if (checked) {
+        updatedGenres.push(value);
+      } else {
+        updatedGenres = updatedGenres.filter((genre) => genre !== value);
+      }
+      setFormData((prevData) => ({ ...prevData, [name]: updatedGenres }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
+  };
+
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      bg="dark"
+      data-bs-theme="dark"
+      dialogClassName="custom-modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>
           {movie.imdb_code ? "Update Movie" : "Add Movie"}
@@ -65,6 +116,16 @@ const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
               type="text"
               name="imdb_code"
               value={formData?.imdb_code}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="title">
+            <Form.Label>Slug</Form.Label>
+            <Form.Control
+              type="text"
+              name="slug"
+              value={formData?.slug}
               onChange={handleChange}
               required
             />
@@ -99,15 +160,41 @@ const MovieModal = ({ show, handleClose, movie, handleSubmit }) => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="genres">
-            <Form.Label>Genres</Form.Label>
+          <Form.Group controlId="title">
+            <Form.Label>Language</Form.Label>
             <Form.Control
               type="text"
-              name="genres"
-              value={formData?.genres?.join(", ")}
+              name="language"
+              value={formData?.language}
               onChange={handleChange}
               required
             />
+          </Form.Group>
+          <Form.Group controlId="title">
+            <Form.Label>YT Trailer Code</Form.Label>
+            <Form.Control
+              type="text"
+              name="yt_trailer_code"
+              value={formData?.yt_trailer_code}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="genres">
+            <Form.Label>Genres</Form.Label>
+            <div className="d-flex flex-wrap">
+              {genres.map((genre) => (
+                <Form.Check
+                  key={genre}
+                  type="checkbox"
+                  label={genre}
+                  name="genres"
+                  value={genre}
+                  checked={formData.genres && formData.genres.includes(genre)}
+                  onChange={handleGenreChange}
+                />
+              ))}
+            </div>
           </Form.Group>
           <Form.Group controlId="synopsis">
             <Form.Label>Synopsis</Form.Label>

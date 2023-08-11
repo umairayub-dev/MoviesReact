@@ -27,49 +27,72 @@ const MoviesPage = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState({});
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const rangeStart = (currentPage - 1) * limit + 1;
+  const rangeEnd = Math.min(currentPage * limit, movies.totalItems);
 
   const handleShowModal = (movie) => {
     setSelectedMovie(movie);
     setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setSelectedMovie({});
-    setShowModal(false);
-  };
-
-  const handleSaveMovie = async (movie) => {
-    // Handle saving/updating movie logic here
-    console.log("Saving/Updating Movie:", movie);
-    try {
-      await axios
-        .patch(
-          "https://victorious-lion-clothes.cyclic.cloud/api/update-movie",
-          {
-            movieId: movie._id,
-            movie: movie,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${state?.token}`,
-            },
-          }
-        )
-        .then((response) => {
-          setMovies({
-            totalItems: response.data.movies.length,
-            movies: response.data.movies,
-          });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const headers = {
     headers: {
       Authorization: `Bearer ${state?.token}`,
     },
   };
+  const handleCloseModal = () => {
+    setSelectedMovie({});
+    setShowModal(false);
+  };
+
+  const handleSaveMovie = async (movie, isEdit) => {
+    console.log("Saving/Updating Movie:", movie);
+    setIsLoading(true);
+    try {
+      let response;
+
+      if (isEdit) {
+        response = await axios.patch(
+          "https://victorious-lion-clothes.cyclic.cloud/api/update-movie",
+          {
+            movieId: movie._id,
+            movie: movie,
+            config: {
+              limit,
+              page: currentPage,
+            },
+          },
+          headers
+        );
+        showToast("success", "Updated Movie Successfully", 100, 1200);
+      } else {
+        response = await axios.post(
+          "https://victorious-lion-clothes.cyclic.cloud/api/movies/add",
+          { ...movie },
+          headers
+        );
+        showToast("success", "Added Movie Successfully", 100, 1200);
+      }
+
+      setMovies({
+        totalItems: response.data.data.movie_count,
+        movies: response.data.data.movies,
+      });
+    } catch (error) {
+      console.log(error);
+      showToast(
+        "error",
+        isEdit ? "Unable to Update Movie" : "Unable to Add Movie",
+        100,
+        1800
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getMovies = async () => {
     console.log("HELLO");
     setIsLoading(true);
@@ -121,26 +144,34 @@ const MoviesPage = () => {
     setCurrentPage(page);
   };
 
-  const rangeStart = (currentPage - 1) * limit + 1;
-  const rangeEnd = Math.min(currentPage * limit, movies.totalItems);
-
   const handleDelete = async (movieId) => {
+    setIsLoading(true);
     try {
       await axios
-        .delete(`https://victorious-lion-clothes.cyclic.cloud/api/movies/delete/${movieId}`, headers)
+        .delete(
+          `https://victorious-lion-clothes.cyclic.cloud/api/movies/delete/${movieId}?page=${currentPage}&limit=${limit}`,
+          {
+            headers: {
+              Authorization: `Bearer ${state?.token}`,
+            },
+          }
+        )
         .then((response) => {
           setMovies({
             totalItems: response.data.data.movie_count,
             movies: response.data.data.movies,
           });
           showToast("success", "Movie Deleted", 100, 1800);
+          setIsLoading(false);
         })
         .catch((erorr) => {
           console.log(erorr);
+          setIsLoading(false);
           showToast("error", "Unable to delete movie", 100, 1800);
         });
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       showToast("error", "Unable to delete movie", 100, 1800);
     }
   };
@@ -169,13 +200,15 @@ const MoviesPage = () => {
           </Spinner>
         ) : (
           <>
-            <MovieTable
-              movies={sortedMovies}
-              sortConfig={sortConfig}
-              handleSort={handleSort}
-              openModal={handleShowModal}
-              deleteMovie={handleDelete}
-            />
+            <div className="container">
+              <MovieTable
+                movies={sortedMovies}
+                sortConfig={sortConfig}
+                handleSort={handleSort}
+                openModal={handleShowModal}
+                deleteMovie={handleDelete}
+              />
+            </div>
             <div className="container d-flex flex-column justify-content-center align-items-center">
               <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center mb-2">
                 <p className="text-white mb-2 mb-md-0">
