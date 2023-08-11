@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { storage } from "../utils/FirebaseConfig";
+import { storage } from "../utils/FirebaseConfig.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from "react";
 
